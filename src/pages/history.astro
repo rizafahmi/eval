@@ -1,5 +1,10 @@
 ---
-import '../styles/global.css';
+import Layout from '../layouts/Layout.astro';
+import Card from '../components/ui/Card.astro';
+import Breadcrumbs from '../components/ui/Breadcrumbs.astro';
+import Badge from '../components/ui/Badge.astro';
+import Button from '../components/ui/Button.astro';
+import EmptyState from '../components/ui/EmptyState.astro';
 import { getEvaluations, getResults, getTemplateById } from '../lib/db';
 
 // Get query params
@@ -71,120 +76,124 @@ try {
 } catch {
   // Database may not be initialized
 }
+
+const breadcrumbItems = [
+  { label: 'Home', href: '/' },
+  ...(templateId ? [{ label: 'Templates', href: '/templates' }] : []),
+  { label: templateName || 'History' }
+];
+
+// Icon for empty state
+const clockIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text-base-content/40" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+</svg>`;
+
+// Helper function to get status variant
+function getStatusVariant(status: string): 'warning' | 'info' | 'success' | 'error' | 'neutral' {
+  switch (status) {
+    case 'pending': return 'warning';
+    case 'running': return 'info';
+    case 'completed': return 'success';
+    case 'failed': return 'error';
+    default: return 'neutral';
+  }
+}
 ---
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Evaluation History - AI Model Evaluation Framework</title>
-</head>
-<body class="bg-gray-50 min-h-screen">
-  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-    <!-- Header -->
-    <header class="mb-8">
-      <nav class="flex items-center gap-6 mb-4">
-        <a href="/" class="text-blue-600 hover:text-blue-800">Home</a>
-        <span class="text-gray-400">/</span>
-        <a href="/templates" class="text-blue-600 hover:text-blue-800">Templates</a>
-        <span class="text-gray-400">/</span>
-        <span class="text-gray-900 font-medium">History</span>
-      </nav>
-      <h1 class="text-3xl font-bold text-gray-900">
-        {templateName ? `History: ${templateName}` : 'Evaluation History'}
-      </h1>
-      <p class="mt-2 text-gray-600">
-        {templateId
-          ? 'Historical evaluations for this template.'
-          : 'All past evaluation runs and their results.'
-        }
-      </p>
-    </header>
+<Layout title={templateName ? `History: ${templateName} - Eval AI` : 'Evaluation History - Eval AI'}>
+  <Breadcrumbs items={breadcrumbItems} />
 
-    <!-- Filters -->
-    {!templateId && (
-      <div class="mb-6 flex gap-4">
-        <a href="/history" class="btn-secondary">All Evaluations</a>
-      </div>
-    )}
-
-    <!-- History List -->
-    <div class="bg-white shadow rounded-lg">
-      {evaluations.length > 0 ? (
-        <div class="overflow-x-auto">
-          <table class="results-table">
-            <thead>
-              <tr>
-                <th>Instruction</th>
-                <th>Rubric</th>
-                <th>Models</th>
-                <th>Best Accuracy</th>
-                <th>Fastest Model</th>
-                <th>Status</th>
-                <th>Date</th>
-                <th>Actions</th>
-              </tr>
-            </thead>
-            <tbody>
-              {evaluations.map(evaluation => (
-                <tr>
-                  <td class="max-w-xs">
-                    <div class="truncate text-sm" title={evaluation.instruction_text}>
-                      {evaluation.instruction_text}
-                    </div>
-                  </td>
-                  <td>
-                    <span class="text-xs bg-gray-100 px-2 py-1 rounded">
-                      {evaluation.accuracy_rubric.replace('_', ' ')}
-                    </span>
-                  </td>
-                  <td>{evaluation.result_count}</td>
-                  <td>
-                    {evaluation.best_accuracy !== undefined ? (
-                      <span class="font-semibold text-green-600">{evaluation.best_accuracy}%</span>
-                    ) : '-'}
-                  </td>
-                  <td>
-                    {evaluation.fastest_model ? (
-                      <div class="text-sm">
-                        <div class="font-medium">{evaluation.fastest_model.model_name}</div>
-                        <div class="text-gray-500">{evaluation.fastest_model.execution_time_ms}ms</div>
-                      </div>
-                    ) : '-'}
-                  </td>
-                  <td>
-                    <span class={`status-${evaluation.status}`}>
-                      {evaluation.status}
-                    </span>
-                  </td>
-                  <td class="text-sm text-gray-500">
-                    {new Date(evaluation.created_at).toLocaleString()}
-                  </td>
-                  <td>
-                    <a
-                      href={`/?evaluation=${evaluation.id}`}
-                      class="text-blue-600 hover:text-blue-800 text-sm font-medium"
-                    >
-                      View
-                    </a>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      ) : (
-        <div class="text-center py-12 text-gray-500">
-          <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-          </svg>
-          <p class="mt-4">No evaluation history yet.</p>
-          <p class="text-sm">Run some evaluations to see them here.</p>
-          <a href="/" class="btn-primary mt-4 inline-block">Go to Evaluate</a>
-        </div>
-      )}
-    </div>
+  <div class="mb-8">
+    <h1 class="text-3xl font-bold">
+      {templateName ? `History: ${templateName}` : 'Evaluation History'}
+    </h1>
+    <p class="mt-2 text-base-content/70">
+      {templateId
+        ? 'Historical evaluations for this template.'
+        : 'All past evaluation runs and their results.'
+      }
+    </p>
   </div>
-</body>
-</html>
+
+  <!-- Filters -->
+  {!templateId && (
+    <div class="mb-6 flex gap-4">
+      <Button href="/history" variant="secondary" size="sm">All Evaluations</Button>
+    </div>
+  )}
+
+  <!-- History List -->
+  <Card>
+    {evaluations.length > 0 ? (
+      <div class="overflow-x-auto">
+        <table class="table table-zebra">
+          <thead>
+            <tr>
+              <th>Instruction</th>
+              <th>Rubric</th>
+              <th>Models</th>
+              <th>Best Accuracy</th>
+              <th>Fastest Model</th>
+              <th>Status</th>
+              <th>Date</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            {evaluations.map(evaluation => (
+              <tr>
+                <td class="max-w-xs">
+                  <div class="truncate text-sm" title={evaluation.instruction_text}>
+                    {evaluation.instruction_text}
+                  </div>
+                </td>
+                <td>
+                  <Badge variant="ghost" size="sm">
+                    {evaluation.accuracy_rubric.replace('_', ' ')}
+                  </Badge>
+                </td>
+                <td>{evaluation.result_count}</td>
+                <td>
+                  {evaluation.best_accuracy !== undefined ? (
+                    <span class="font-semibold text-success">{evaluation.best_accuracy}%</span>
+                  ) : '-'}
+                </td>
+                <td>
+                  {evaluation.fastest_model ? (
+                    <div class="text-sm">
+                      <div class="font-medium">{evaluation.fastest_model.model_name}</div>
+                      <div class="text-base-content/50">{evaluation.fastest_model.execution_time_ms}ms</div>
+                    </div>
+                  ) : '-'}
+                </td>
+                <td>
+                  <Badge variant={getStatusVariant(evaluation.status)}>
+                    {evaluation.status}
+                  </Badge>
+                </td>
+                <td class="text-sm text-base-content/70">
+                  {new Date(evaluation.created_at).toLocaleString()}
+                </td>
+                <td>
+                  <a
+                    href={`/?evaluation=${evaluation.id}`}
+                    class="btn btn-xs btn-ghost text-primary"
+                  >
+                    View
+                  </a>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+    ) : (
+      <EmptyState
+        title="No evaluation history"
+        description="Run some evaluations to see them here."
+        icon={clockIcon}
+        action={{ label: 'Go to Evaluate', href: '/' }}
+      />
+    )}
+  </Card>
+</Layout>
