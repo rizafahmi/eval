@@ -38,14 +38,14 @@ We will follow a component-driven approach. First, we establish the design syste
 - [x] T009 Create `Layout.astro` in `src/layouts/Layout.astro` integrating Navbar, ThemeController, and Toast container
 - [x] T010 [P] Create `EmptyState.astro` component in `src/components/ui/EmptyState.astro` (Hero with CTA)
 
-## Phase 3: User Story 1 - Global Application Layout
+## Phase 3: User Story 1 - Global Application Layout & Routing
 
-**Goal**: Apply the new global layout to all main pages and ensure navigation works.
+**Goal**: Apply the new global layout and implement the new routing structure (History on Home).
 **Story**: [US1] Global Application Layout
 
-- [x] T011 [US1] Create E2E test for Global Layout and Navigation in `tests/e2e/layout.spec.ts`
-- [x] T012 [US1] Update `src/pages/index.astro` (Home) to use new `Layout` and `EmptyState` (if needed)
-- [x] T013 [P] [US1] Update `src/pages/history.astro` to use new `Layout`
+- [ ] T011 [US1] Create E2E test for Global Layout and new Routing structure in `tests/e2e/layout.spec.ts` (Verify fail first)
+- [x] T012 [US1] Refactor `src/pages/index.astro` to serve as Evaluation History Dashboard (migrate logic from `history.astro`) using new `Layout`
+- [x] T013 [US1] Remove `src/pages/history.astro` and configure redirect to `/` if necessary
 - [x] T014 [P] [US1] Update `src/pages/models.astro` to use new `Layout`
 - [x] T015 [P] [US1] Update `src/pages/templates.astro` to use new `Layout`
 - [x] T016 [US1] Verify responsive behavior of Navbar on mobile viewports
@@ -55,7 +55,7 @@ We will follow a component-driven approach. First, we establish the design syste
 **Goal**: Refactor Model and Template list/edit views using the new DaisyUI components.
 **Story**: [US2] Model and Template Management UI
 
-- [x] T017 [US2] Create E2E test for Models page UI elements in `tests/e2e/models-ui.spec.ts`
+- [ ] T017 [US2] Create E2E test for Models page UI elements in `tests/e2e/models-ui.spec.ts` (Verify fail first)
 - [x] T018 [US2] Refactor `src/pages/models.astro` list view to use `Card` or `Table` components
 - [x] T019 [US2] Refactor `src/pages/api/models/[id].ts` forms (or the page handling edits) to use `Input` and `Button` atoms
 - [x] T020 [P] [US2] Refactor `src/pages/templates.astro` list view to use `Card` or `Table` components
@@ -64,19 +64,21 @@ We will follow a component-driven approach. First, we establish the design syste
 
 ## Phase 5: User Story 3 - Evaluation Results Visualization
 
-**Goal**: Refactor Evaluation Results views for better hierarchy and status indication.
+**Goal**: Implement dedicated Evaluation Results page and refactor visualizations.
 **Story**: [US3] Evaluation Results Visualization
 
-- [x] T023 [US3] Create E2E test for Results visualization in `tests/e2e/results-ui.spec.ts`
-- [x] T024 [US3] Refactor Evaluation Result items/rows to use `Badge` for status (Success/Error) with semantic colors
-- [x] T025 [P] [US3] Apply `Table` styles to result data grids (if applicable)
-- [x] T026 [US3] Integrate `Skeleton` loaders for data-heavy sections (if loading states exist)
+- [ ] T023 [US3] Create E2E test for dedicated Results page and visualization in `tests/e2e/results-ui.spec.ts` (Verify fail first)
+- [x] T024 [US3] Create `src/pages/evaluations/[id].astro` to display detailed results (migrate logic from old `index.astro`)
+- [x] T025 [US3] Update `NewEvaluationModal` (or logic) to redirect to `/evaluations/[id]` upon starting a run
+- [x] T026 [US3] Refactor Evaluation Result items/rows to use `Badge` for status (Success/Error) with semantic colors
+- [x] T027 [P] [US3] Apply `Table` styles to result data grids within the new dedicated page
+- [x] T028 [US3] Integrate `Skeleton` loaders for data-heavy sections (if loading states exist)
 
 ## Phase 6: Polish & Cross-Cutting Concerns
 
 **Goal**: Final consistency checks, accessibility validation, and clean up.
 
-- [x] T027 Run Lighthouse Accessibility audit on all major pages and fix violations (Target > 90) use chrome mcp server
-- [x] T028 Verify keyboard navigation (focus rings) on all interactive elements
-- [x] T029 Verify dark mode persistence across page reloads
-- [x] T030 Final manual visual check against "CleanShot" reference implications
+- [ ] T029 Run Lighthouse Accessibility audit on all major pages and fix violations (Target > 90) use chrome mcp server
+- [ ] T030 Verify keyboard navigation (focus rings) on all interactive elements
+- [ ] T031 Verify dark mode persistence across page reloads
+- [ ] T032 Final manual visual check against "CleanShot" reference implications

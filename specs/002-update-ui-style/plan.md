@@ -1,79 +1,91 @@
-# Implementation Plan: Update UI with DaisyUI
+# Implementation Plan - Update UI with DaisyUI
 
-**Branch**: `002-update-ui-style` | **Date**: 2025-12-20 | **Spec**: [specs/002-update-ui-style/spec.md](specs/002-update-ui-style/spec.md)
-**Input**: Feature specification from `specs/002-update-ui-style/spec.md`
-
-## Summary
-
-This feature updates the application's user interface to use DaisyUI (a Tailwind CSS component library) for a consistent, modern, and accessible design. Key changes include a global layout with a top navbar, persistent theme selection (system/light/dark), and styled components for data tables, forms, and evaluation results.
+**Feature**: Update UI with DaisyUI
+**Status**: Draft
+**Phase**: 0
+**Branch**: `002-update-ui-style`
 
 ## Technical Context
 
-**Language/Version**: TypeScript 5.6.0+, Node.js >= 22.0.0
-**Primary Dependencies**: Astro 5.16.6, Tailwind CSS 4.0.0, daisyui (v5 beta/latest compatible with TW v4)
-**Storage**: localStorage for theme persistence; SQLite for application data (no schema changes)
-**Testing**: Vitest (Unit), Playwright (E2E for UI verification)
-**Target Platform**: Web (Responsive: Mobile + Desktop)
-**Project Type**: Web Application (Astro + Node.js adapter)
-**Performance Goals**: <200ms TTI, <100ms interaction latency for UI controls
-**Constraints**: Must maintain accessibility > 90 (Lighthouse), mobile-first responsive design
-**Scale/Scope**: ~10-15 UI components to update/create, global layout refactoring
+| Component | Technology | Current Status | Notes |
+| :--- | :--- | :--- | :--- |
+| **Frontend Framework** | Astro (SSR) | Active | Using Node.js adapter for server-side rendering. |
+| **Styling Engine** | Tailwind CSS v4.0.0 | Active | Needs configuration for DaisyUI v5 (beta) compatibility. |
+| **UI Library** | DaisyUI v5 (Beta) | Missing | NEEDS CLARIFICATION: Best integration method for Tailwind v4 + Astro. |
+| **Routing** | Astro Pages | Active | Needs restructuring (move `index.astro` logic to new `history` logic, `models.astro`, etc.). |
+| **State Management** | LocalStorage | Partial | Used for theme persistence; need robust implementation. |
+| **Icons** | SVG / Heroicons | Active | Maintain consistency or switch to a unified icon set. |
+| **Build Tool** | Vite (via Astro) | Active | Ensure DaisyUI plugin plays well with Vite build. |
 
 ## Constitution Check
 
-*GATE: Must pass before Phase 0 research. Re-check after Phase 1 design.*
-
-### I. Code Quality Standards
-- **SRP**: UI components will be broken down into small, reusable units (e.g., `Navbar`, `ModelCard`, `ResultBadge`).
-- **Naming**: DaisyUI utility classes provide explicit naming; custom components will follow project conventions.
-
-### II. Testing Discipline
-- **Test-First**: E2E tests will be written to verify UI elements presence and interactivity before implementation.
-- **Coverage**: Manual verification + E2E checks (Visual regression deferred).
-
-### III. User Experience Consistency
-- **Patterns**: DaisyUI enforces consistent visual patterns.
-- **Workflows**: Navigation and primary actions (Create Evaluation) are standardized.
-
-### IV. Performance & Scalability
-- **Goals**: DaisyUI is lightweight (pure CSS/Tailwind).
-- **Optimization**: Theme switching handled client-side to avoid FOUC.
-
-## Project Structure
-
-### Documentation (this feature)
-
-```text
-specs/002-update-ui-style/
-├── plan.md              # This file
-├── research.md          # Completed
-├── data-model.md        # Completed
-├── quickstart.md        # Completed
-├── contracts/           # Completed (ui-state.md)
-└── tasks.md             # To be created
-```
-
-### Source Code (repository root)
-
-```text
-src/
-├── components/          # Reusable UI components
-│   ├── layout/          # Layout components (Navbar, Sidebar if any, Footer)
-│   ├── ui/              # Atom components (Button, Input, Card, Badge)
-│   └── ...
-├── layouts/             # Astro Layouts (Layout.astro)
-├── pages/               # Astro Pages
-└── styles/              # Global styles (global.css with Tailwind directives)
-
-tests/
-├── e2e/                 # Playwright tests for UI flows
-└── unit/                # Component unit tests
-```
-
-**Structure Decision**: Standard Astro project structure. Adding `src/components/ui` for atoms and `src/components/layout` for structural components.
+| Principle | Compliant? | Justification |
+| :--- | :--- | :--- |
+| **I. Code Quality** | YES | Will use component-based architecture (Astro components) to ensure SRP and maintainability. |
+| **II. Testing Discipline** | YES | E2E tests (Playwright) will be updated/created FIRST to fail against new UI structure before implementation. |
+| **III. UX Consistency** | YES | DaisyUI provides a consistent design system; Layout component ensures global consistency. |
+| **IV. Performance** | YES | DaisyUI is CSS-only (mostly), minimizing JS bundle size; Astro SSR keeps initial load fast. |
 
 ## Complexity Tracking
 
-| Violation | Why Needed | Simpler Alternative Rejected Because |
-|-----------|------------|-------------------------------------|
-| N/A | | |
+| Complexity Area | Risk Level | Mitigation Strategy |
+| :--- | :--- | :--- |
+| **Tailwind v4 + DaisyUI v5** | Medium | Research compatibility and exact configuration steps for this beta combination. |
+| **Routing Restructure** | Medium | Careful migration of `index.astro` to History view; preserving data loading logic. |
+| **Theme Persistence** | Low | Simple JS script in `<head>` to prevent FOUC (Flash of Unstyled Content). |
+
+## Phase 0: Discovery & Research
+
+### 1. Unknowns & Clarifications
+
+- **DaisyUI v5 + Tailwind v4**: Need to verify the correct installation and configuration process since both are relatively new/beta.
+- **Theme Switching**: Best practice for Astro SSR + DaisyUI theme switching to avoid FOUC.
+- **Routing Migration**: Strategy for moving `/history` to `/` and handling the dedicated `/evaluations/[id]` route.
+
+### 2. Research Plan
+
+- **Task**: Research DaisyUI v5 installation with Tailwind v4 in an Astro project.
+- **Task**: Research "theme change" best practices for Astro SSR (handling `localStorage` vs cookie for FOUC prevention).
+- **Task**: Prototype the new routing structure (file moves) and ensure `getStaticPaths` or SSR modes are correctly set.
+
+## Phase 1: Detailed Design
+
+### 1. Data Model Changes
+
+- **No schema changes** anticipated for SQLite.
+- **Frontend State**:
+  - `theme`: String (persisted in localStorage).
+  - `evaluationData`: Passed to client via `define:vars` (existing pattern).
+
+### 2. API Contracts
+
+- **Existing Endpoints**:
+  - `/api/models` (GET, POST, PATCH, DELETE) - Keep, update return types if needed for UI.
+  - `/api/templates` (GET, POST, DELETE) - Keep.
+  - `/api/evaluate` (POST) - Keep.
+  - `/api/evaluation-status` (GET) - Keep.
+  - `/api/results` (GET) - Keep.
+- **New/Modified**:
+  - `GET /evaluations/[id]`: New page route (SSR) fetching specific evaluation details.
+
+### 3. Component Architecture
+
+- **Layout.astro**: Update with DaisyUI Navbar, Sidebar (if needed for mobile), Footer.
+- **ThemeController.astro**: New component for theme switching.
+- **Card.astro**: Refactor to use DaisyUI `card` classes.
+- **Button.astro**: Refactor to use DaisyUI `btn` classes.
+- **Table.astro**: Create/Refactor for consistent list views.
+- **StatusBadge.astro**: Component for consistent status coloring.
+- **NewEvaluationModal.astro**: Update to use `<dialog>` with DaisyUI styles.
+
+## Phase 2: Implementation Steps (Draft)
+
+1.  **Setup & Config**: Install DaisyUI, configure Tailwind.
+2.  **Theme Infrastructure**: Implement `ThemeController` and no-FOUC script.
+3.  **Layout Migration**: Update `Layout.astro` and `Navbar.astro`.
+4.  **Route Restructure**: Move `index.astro` -> `history.astro` (archive/ref), create new `index.astro` (History view), create `/evaluations/[id].astro`.
+5.  **Component Refactor**: Update core UI components (Button, Card, Input) to DaisyUI.
+6.  **Page Polish**: Apply new components to Models, Templates, and new Evaluation pages.
+7.  **Testing**: Fix E2E tests to match new selectors and flows.
+
+---

@@ -1,38 +1,40 @@
-# Quickstart: UI Development with DaisyUI
+# Quickstart: Update UI with DaisyUI
 
-**Feature**: `002-update-ui-style`
+## Key Component Usage
 
-## Setup
+### 1. Primary Action Button
+On the homepage, use the standard DaisyUI primary button class with specific placement:
+```html
+<div class="flex justify-between items-center mb-6">
+  <h1 class="text-3xl font-bold">History</h1>
+  <button id="new-evaluation-btn" class="btn btn-primary">New Evaluation</button>
+</div>
+```
 
-1. **Install Dependencies**:
-   ```bash
-   npm install
-   ```
-   *Ensures DaisyUI and Tailwind CSS are installed.*
+### 2. Status Badges
+Use consistent semantic colors for evaluation statuses:
+- **Completed**: `<span class="badge badge-success">Completed</span>`
+- **Running**: `<span class="badge badge-info animate-pulse">Running</span>`
+- **Pending**: `<span class="badge badge-warning">Pending</span>`
+- **Failed**: `<span class="badge badge-error">Failed</span>`
 
-2. **Start Development Server**:
-   ```bash
-   npm run dev
-   ```
+### 3. Data Tables
+Apply DaisyUI table utilities for all list views:
+```html
+<table class="table table-zebra w-full">
+  <thead>
+    <tr>
+      <th>...</th>
+    </tr>
+  </thead>
+  <tbody>
+    ...
+  </tbody>
+</table>
+```
 
-## Key Components
-
-### Global Layout
-- Located in `src/layouts/Layout.astro`.
-- Wraps all pages.
-- Includes `Navbar`, `Footer` (if any), and `ThemeController`.
-
-### UI Components
-- **Buttons**: Use `btn` class (e.g., `btn btn-primary`).
-- **Inputs**: Use `input input-bordered`.
-- **Cards**: Use `card card-bordered bg-base-100 shadow-xl`.
-- **Tables**: Use `table`.
-
-### Adding a New Page
-1. Create `.astro` file in `src/pages/`.
-2. Wrap content in `<Layout title="Page Title">`.
-3. Use `Breadcrumbs` component below the title.
-
-### Theme Switching
-- The theme is applied to the `<html>` tag via `data-theme` attribute.
-- Toggle it using the theme switcher in the Navbar.
+## Routing Checklist
+- [ ] Move `src/pages/history.astro` logic to `src/pages/index.astro`.
+- [ ] Create `src/pages/evaluations/[id].astro` using the logic from the old `index.astro`.
+- [ ] Update `Navbar.astro` to remove the "History" link and "New Evaluation" button.
+- [ ] Ensure all internal links point to the new `/evaluations/[id]` route.

@@ -7,17 +7,14 @@
 
 ## Clarifications
 
-### Session 2025-12-20
-- Q: What type of navigation layout should be used? → A: Top Navbar
-- Q: How should theme selection be persisted? → A: System Default initially, then persist overrides in localStorage.
-- Q: How should empty states (no models/templates) be handled? → A: Empty State Hero with "Create New" CTA.
-- Q: How should global notifications/alerts (e.g., Success/Error) be handled? → A: Toast Notifications using DaisyUI Alerts.
-- Q: How should loading states for data-heavy sections be handled? → A: Skeleton Loaders matching the content structure.
-- Q: How should secondary navigation/wayfinding be handled? → A: Breadcrumbs + Page Title below the Navbar.
-- Q: Where should the "Create New Evaluation" primary action be placed? → A: Top-Right of the content area for high visibility.
-- Q: How should keyboard accessibility be ensured for primary actions? → A: Standard HTML5 navigation with visible DaisyUI focus rings.
+### Session 2025-12-21
 
-## User Scenarios & Testing *(mandatory)*
+- Q: Where should detailed evaluation results be displayed now that the Homepage shows the history list? → A: Dedicated Page (e.g., `/evaluations/[id]`).
+- Q: Should the `/history` page be retained? → A: No, remove `/history` and merge its functionality into the Homepage (`/`).
+- Q: Where should the "New Evaluation" primary action button be located? → A: Top-Right of the content area on the Homepage (removed from Navbar).
+- Q: How should a new evaluation be initiated? → A: The user is redirected to `/evaluations/[id]` where the evaluation is shown in a "Running" state.
+
+## User Scenarios & Testing _(mandatory)_
 
 ### User Story 1 - Global Application Layout (Priority: P1)
 
@@ -25,11 +22,11 @@ As a user, I want a consistent, modern application layout so that I can easily n
 
 **Why this priority**: This establishes the foundational visual structure for the entire application.
 
-**Independent Test**: Can be fully tested by navigating between the Home, Models, Templates, and History pages and verifying the persistent layout structure.
+**Independent Test**: Can be fully tested by navigating between the Home, Models, and Templates pages and verifying the persistent layout structure.
 
 **Acceptance Scenarios**:
 
-1. **Given** I am on any page of the application, **When** I view the screen, **Then** I see a consistent Top Navbar facilitating access to primary sections (Models, Templates, History).
+1. **Given** I am on any page of the application, **When** I view the screen, **Then** I see a consistent Top Navbar facilitating access to primary sections (Models, Templates).
 2. **Given** I am on a nested page, **When** I view the screen, **Then** I see a Breadcrumb trail indicating my current location.
 3. **Given** I am on a mobile device, **When** I view the application, **Then** the Top Navbar adapts responsively (e.g., hamburger menu).
 4. **Given** the application is loaded, **When** I look at the visual theme, **Then** it utilizes DaisyUI's styling conventions (colors, spacing, typography).
@@ -51,53 +48,57 @@ As a user, I want to view lists of models and templates in visually distinct car
 
 ---
 
-### User Story 3 - Evaluation Results Visualization (Priority: P3)
+### User Story 3 - Evaluation History and Results (Priority: P3)
 
-As a user, I want evaluation results to be presented with clear hierarchy and status indicators, so that I can easily interpret the outcome of AI model tests.
+As a user, I want to see my past evaluations on the homepage and view detailed results on dedicated pages, so that I can track progress and analyze AI performance.
 
-**Why this priority**: Reading results is the primary value consumption step; clarity here is vital.
+**Why this priority**: Reading results is the primary value consumption step; accessibility to history is vital.
 
-**Independent Test**: Run an evaluation or view history and check the result display.
+**Independent Test**: Run an evaluation, go to Home, click the result to view details on its own page.
 
 **Acceptance Scenarios**:
 
-1. **Given** an evaluation result, **When** I view the details, **Then** status indicators (Success/Failure) use appropriate semantic colors (Success/Error variants).
-2. **Given** a data table of results, **When** I view it, **Then** it uses DaisyUI table styles for readability (stripes, hover states).
+1. **Given** I am on the Homepage, **When** I view the list, **Then** I see a table of past evaluations (History) with status, date, and basic metrics.
+2. **Given** an evaluation in the history list, **When** I click it, **Then** I am navigated to a dedicated results page (`/evaluations/[id]`).
+3. **Given** an evaluation result page, **When** I view the details, **Then** status indicators (Success/Failure) use appropriate semantic colors (Success/Error variants).
 
 ### Edge Cases
 
 - What happens when the screen size is extremely small? (Layout should stack vertically).
 - How does the system handle dark mode? (System defaults to user preference initially, but user can override via the theme switcher. Selection MUST be persisted across sessions using localStorage).
 
-## Requirements *(mandatory)*
+## Requirements _(mandatory)_
 
 ### Functional Requirements
 
 - **FR-001**: System MUST integrate the latest version of the DaisyUI library as a Tailwind CSS plugin.
-- **FR-002**: System MUST utilize a global layout component that includes a Top Navbar (Sidebar is out of scope) styled with DaisyUI.
+- **FR-002**: System MUST utilize a global layout component that includes a Top Navbar styled with DaisyUI.
 - **FR-003**: The "Models" and "Templates" list views MUST use DaisyUI `table` or `card` components to display items.
 - **FR-004**: Form elements (inputs, textareas, selects, buttons) throughout the application MUST use DaisyUI utility classes (e.g., `input`, `btn`, `select`).
 - **FR-005**: Evaluation status indicators (e.g., Running, Completed, Failed) MUST use DaisyUI `badge` or `alert` components with semantic coloring.
 - **FR-006**: The application MUST include a theme switcher UI control that allows users to select between multiple DaisyUI themes (at minimum "light" and "dark").
 - **FR-007**: List views MUST include an "Empty State Hero" component with a clear Call-to-Action (CTA) when no data is present.
-- **FR-008**: System MUST implement a global notification system using DaisyUI Toast/Alert components for user feedback (e.g., "Model saved successfully", "Evaluation failed").
+- **FR-008**: System MUST implement a global notification system using DaisyUI Toast/Alert components for user feedback.
 - **FR-009**: The application MUST display DaisyUI Breadcrumbs on all pages to facilitate secondary navigation.
-- **FR-010**: The primary action button (e.g., "Create New Evaluation") MUST be consistently placed in the top-right of the content area for high discoverability.
-- **FR-011**: All interactive elements MUST be keyboard accessible with visible focus indicators using DaisyUI's focus ring utility classes.
+- **FR-010**: The primary action button ("New Evaluation") MUST be placed in the top-right of the content area on the Homepage, not in the Navbar.
+- **FR-011**: The Homepage (`/`) MUST serve as the evaluation history dashboard, listing all past evaluations.
+- **FR-012**: Detailed evaluation results MUST be displayed on a dedicated page (`/evaluations/[id]`).
+- **FR-013**: All interactive elements MUST be keyboard accessible with visible focus indicators using DaisyUI's focus ring utility classes.
 
-### Key Entities *(include if feature involves data)*
+### Key Entities _(include if feature involves data)_
 
 - **Layout**: The visual wrapper for all pages.
 - **Theme**: The color scheme and visual style definitions provided by DaisyUI.
 
-## Success Criteria *(mandatory)*
+## Success Criteria _(mandatory)_
 
 ### Measurable Outcomes
 
-- **SC-001**: 100% of distinct pages (Home, Models, Templates, History, Run Evaluation) utilize the new DaisyUI-based layout.
+- **SC-001**: 100% of distinct pages (Home, Models, Templates, Evaluation Details) utilize the new DaisyUI-based layout.
 - **SC-002**: All interactive elements (buttons, inputs) on primary pages possess DaisyUI styling classes.
 - **SC-003**: The application achieves a Lighthouse Accessibility score of >90 (leveraging DaisyUI's built-in accessibility features).
 - **SC-004**: Mobile layout renders without horizontal scrolling on standard mobile viewport widths (375px+).
+- **SC-005**: `/history` route is removed and redirects to or is replaced by `/`.
 
 ## Assumptions
 
