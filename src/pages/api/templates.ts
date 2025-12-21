@@ -4,11 +4,7 @@
 import type { APIRoute } from 'astro';
 import {
   insertTemplate,
-  getTemplates,
-  getTemplateById,
-  updateTemplate,
-  deleteTemplate,
-  getModelById
+  getTemplates
 } from '../../lib/db';
 import { validateCreateTemplate } from '../../lib/validators';
 import type { RubricType } from '../../lib/types';

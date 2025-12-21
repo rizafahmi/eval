@@ -276,7 +276,7 @@ export function validatePartialCreditConcepts(
 
 export function validateExpectedOutput(
   expectedOutput: unknown,
-  rubricType: RubricType
+  _rubricType: RubricType
 ): ValidationResult {
   // Required for all rubric types
   if (typeof expectedOutput !== 'string' || expectedOutput.trim().length === 0) {

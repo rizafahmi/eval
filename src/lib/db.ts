@@ -52,7 +52,6 @@ export function closeDatabase(): void {
 
 const ALGORITHM = 'aes-256-gcm';
 const IV_LENGTH = 16;
-const AUTH_TAG_LENGTH = 16;
 
 function getEncryptionKey(): Buffer {
   const key = import.meta.env?.ENCRYPTION_KEY || process.env.ENCRYPTION_KEY;
@@ -625,8 +624,6 @@ export function getTemplateHistory(
   fastest_model?: { model_name: string; execution_time_ms: number };
   result_count: number;
 }[] {
-  const database = getDatabase();
-
   const evaluations = getEvaluations(templateId, limit, offset);
 
   return evaluations.map(evaluation => {

@@ -43,7 +43,6 @@ test.describe('Results Visualization UI', () => {
     await page.goto('/');
 
     // Check table headers
-    const headers = page.locator('#results-container th');
     const expectedHeaders = ['Model Name', 'Status', 'Time (ms)', 'Total Tokens', 'Accuracy Score'];
 
     for (const header of expectedHeaders) {

@@ -2,8 +2,7 @@
 // Evaluation status polling endpoint
 
 import type { APIRoute } from 'astro';
-import { getEvaluationStatus, getEvaluation } from '../../lib/db';
-import { validateUuid } from '../../lib/validators';
+import { getEvaluationStatus } from '../../lib/db';
 
 export const GET: APIRoute = async ({ url }) => {
   try {

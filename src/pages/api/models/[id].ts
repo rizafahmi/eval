@@ -7,11 +7,10 @@ import {
   updateModel,
   deleteModel,
   getModelUsageCount,
-  hasActiveEvaluations,
-  decryptApiKey
+  hasActiveEvaluations
 } from '../../../lib/db';
 import { ClientFactory } from '../../../lib/api-clients';
-import { validateUuid, validateApiKeyFormat } from '../../../lib/validators';
+import { validateApiKeyFormat } from '../../../lib/validators';
 
 // GET /api/models/:id - Get model details
 export const GET: APIRoute = async ({ params }) => {

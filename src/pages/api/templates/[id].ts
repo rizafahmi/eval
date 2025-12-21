@@ -13,9 +13,7 @@ import {
   validateDescription,
   validateInstruction,
   validateRubricType,
-  validateModelIds,
-  validateExpectedOutput,
-  validatePartialCreditConcepts
+  validateModelIds
 } from '../../../lib/validators';
 import type { RubricType } from '../../../lib/types';
 

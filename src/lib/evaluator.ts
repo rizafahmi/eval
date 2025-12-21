@@ -11,7 +11,7 @@ import {
   getResults,
   decryptApiKey
 } from './db';
-import type { RubricType, EvaluationStatus, ResultStatus } from './types';
+import type { RubricType, ResultStatus } from './types';
 
 // Timeout constants
 const MODEL_TIMEOUT_MS = 30000;  // 30 seconds per model

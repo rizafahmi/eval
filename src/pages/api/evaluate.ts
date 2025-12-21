@@ -5,8 +5,7 @@ import type { APIRoute } from 'astro';
 import {
   insertEvaluation,
   insertResult,
-  getModelById,
-  getModels
+  getModelById
 } from '../../lib/db';
 import { startEvaluation } from '../../lib/evaluator';
 import { validateCreateEvaluation } from '../../lib/validators';

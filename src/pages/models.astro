@@ -271,7 +271,7 @@ const modelIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text
 
         target.dataset.active = newActive.toString();
 
-      } catch (error) {
+      } catch {
         addToast('Failed to update model status', 'error');
         // Revert the toggle
         target.checked = !newActive;
@@ -359,7 +359,7 @@ const modelIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text
         const data = await response.json();
 
         // Remove sensitive data
-        const exportData = data.models.map(({ api_key_encrypted, ...rest }: any) => rest);
+        const exportData = data.models.map(({ api_key_encrypted: _api_key_encrypted, ...rest }: any) => rest);
 
         const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
         const url = window.URL.createObjectURL(blob);
@@ -370,7 +370,7 @@ const modelIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text
         a.click();
         document.body.removeChild(a);
         window.URL.revokeObjectURL(url);
-      } catch (error) {
+      } catch {
         addToast('Failed to export models', 'error');
       }
     });

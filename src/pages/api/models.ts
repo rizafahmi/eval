@@ -5,17 +5,12 @@ import type { APIRoute } from 'astro';
 import {
   insertModel,
   getModels,
-  getModelById,
-  updateModel,
-  deleteModel,
-  getModelUsageCount,
-  hasActiveEvaluations
+  getModelUsageCount
 } from '../../lib/db';
 import { ClientFactory } from '../../lib/api-clients';
 import {
   validateCreateModel,
-  validateProvider,
-  validateApiKeyFormat
+  validateProvider
 } from '../../lib/validators';
 import type { Provider } from '../../lib/types';
 
