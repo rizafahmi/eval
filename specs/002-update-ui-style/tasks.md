@@ -78,7 +78,7 @@ We will follow a component-driven approach. First, we establish the design syste
 
 **Goal**: Final consistency checks, accessibility validation, and clean up.
 
-- [ ] T029 Run Lighthouse Accessibility audit on all major pages and fix violations (Target > 90) use chrome mcp server
-- [ ] T030 Verify keyboard navigation (focus rings) on all interactive elements
-- [ ] T031 Verify dark mode persistence across page reloads
-- [ ] T032 Final manual visual check against "CleanShot" reference implications
+- [x] T029 Run Lighthouse Accessibility audit on all major pages and fix violations (Target > 90) use chrome mcp server
+- [x] T030 Verify keyboard navigation (focus rings) on all interactive elements
+- [x] T031 Verify dark mode persistence across page reloads
+- [x] T032 Final manual visual check against "CleanShot" reference implications
