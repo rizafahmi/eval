@@ -1,5 +1,14 @@
 @import 'tailwindcss';
-@plugin "daisyui";
+@plugin "daisyui" {
+  themes:
+    light --default,
+    dark --prefersdark,
+    cupcake,
+    nord,
+    luxury,
+    silk;
+}
+@plugin "@tailwindcss/typography";
 
 /* Focus ring styles for accessibility */
 *:focus-visible {
