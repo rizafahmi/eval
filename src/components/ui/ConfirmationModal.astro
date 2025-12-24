@@ -20,12 +20,12 @@ const {
 
 <dialog id={id} class="modal">
   <div class="modal-box">
-    <h3 class="font-bold text-lg">{title}</h3>
-    <p class="py-4">{message}</p>
+    <h3 class="font-display text-2xl font-semibold mb-4 text-gold-accessible">{title}</h3>
+    <p class="py-4 text-base-content/80 leading-relaxed">{message}</p>
     <div class="modal-action">
-      <form method="dialog">
-        <button class="btn">{cancelLabel}</button>
-        <button class={`btn btn-${confirmVariant} ml-2`} id={`${id}-confirm`} value="confirm">{confirmLabel}</button>
+      <form method="dialog" class="flex gap-3 w-full justify-end">
+        <button class="btn btn-ghost min-w-24">{cancelLabel}</button>
+        <button class={`btn btn-${confirmVariant} min-w-24`} id={`${id}-confirm`} value="confirm">{confirmLabel}</button>
       </form>
     </div>
   </div>
