@@ -28,67 +28,73 @@ const rubrics: { value: RubricType; label: string }[] = [
 ];
 ---
 
-<form method="get" class="flex flex-wrap items-end gap-4 bg-base-100 p-4 rounded-lg shadow-sm mb-6 border border-base-200">
+<form method="get" class="card-luxe p-5 mb-8 animate-reveal delay-100">
   {preservedParams.map(param => (
     <input type="hidden" name={param.key} value={param.value} />
   ))}
 
-  <div class="form-control">
-    <label class="label">
-      <span class="label-text text-xs">From Date</span>
-    </label>
-    <input 
-      type="date" 
-      name="fromDate" 
-      value={fromDate} 
-      class="input input-bordered input-sm" 
-    />
-  </div>
+  <div class="flex flex-wrap items-end gap-4">
+    <div class="form-control">
+      <label class="label">
+        <span class="metric-label text-xs">From Date</span>
+      </label>
+      <input
+        type="date"
+        name="fromDate"
+        value={fromDate}
+        class="input input-bordered input-sm border-gold-light focus:border-luxe-gold transition-colors"
+      />
+    </div>
 
-  <div class="form-control">
-    <label class="label">
-      <span class="label-text text-xs">To Date</span>
-    </label>
-    <input 
-      type="date" 
-      name="toDate" 
-      value={toDate} 
-      class="input input-bordered input-sm" 
-    />
-  </div>
+    <div class="form-control">
+      <label class="label">
+        <span class="metric-label text-xs">To Date</span>
+      </label>
+      <input
+        type="date"
+        name="toDate"
+        value={toDate}
+        class="input input-bordered input-sm border-gold-light focus:border-luxe-gold transition-colors"
+      />
+    </div>
 
-  <div class="form-control">
-    <label class="label">
-      <span class="label-text text-xs">Rubric</span>
-    </label>
-    <select name="rubric" class="select select-bordered select-sm">
-      <option value="">All Rubrics</option>
-      {rubrics.map(r => (
-        <option value={r.value} selected={r.value === rubric}>{r.label}</option>
-      ))}
-    </select>
-  </div>
+    <div class="form-control">
+      <label class="label">
+        <span class="metric-label text-xs">Rubric</span>
+      </label>
+      <select name="rubric" class="select select-bordered select-sm border-gold-light focus:border-luxe-gold transition-colors">
+        <option value="">All Rubrics</option>
+        {rubrics.map(r => (
+          <option value={r.value} selected={r.value === rubric}>{r.label}</option>
+        ))}
+      </select>
+    </div>
 
-  <div class="form-control w-24">
-    <label class="label">
-      <span class="label-text text-xs">Min Score</span>
-    </label>
-    <input 
-      type="number" 
-      name="minScore" 
-      value={minScore} 
-      min="0" 
-      max="100" 
-      class="input input-bordered input-sm" 
-      placeholder="0-100"
-    />
-  </div>
+    <div class="form-control w-28">
+      <label class="label">
+        <span class="metric-label text-xs">Min Score</span>
+      </label>
+      <input
+        type="number"
+        name="minScore"
+        value={minScore}
+        min="0"
+        max="100"
+        class="input input-bordered input-sm font-mono border-gold-light focus:border-luxe-gold transition-colors"
+        placeholder="0-100"
+      />
+    </div>
 
-  <div class="form-control pb-0.5">
-    <button type="submit" class="btn btn-primary btn-sm">Filter</button>
-  </div>
-  
-  <div class="form-control pb-0.5">
-    <a href={Astro.url.pathname + (preservedParams.length ? '?' + new URLSearchParams(preservedParams.map(p => [p.key, p.value])).toString() : '')} class="btn btn-ghost btn-sm">Reset</a>
+    <div class="form-control pb-0.5">
+      <button type="submit" class="btn btn-luxe btn-luxe-primary btn-sm font-semibold">
+        Filter
+      </button>
+    </div>
+
+    <div class="form-control pb-0.5">
+      <a href={Astro.url.pathname + (preservedParams.length ? '?' + new URLSearchParams(preservedParams.map(p => [p.key, p.value])).toString() : '')} class="btn btn-ghost btn-sm">
+        Reset
+      </a>
+    </div>
   </div>
 </form>

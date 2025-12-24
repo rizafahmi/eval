@@ -97,16 +97,24 @@ function getStatusVariant(status: string): 'warning' | 'info' | 'success' | 'err
     confirmVariant="error"
   />
 
-  <div class="flex items-center justify-between mb-8">
-    <div>
-      <h1 class={TYPOGRAPHY.h1}>Evaluation History</h1>
-      <p class={`mt-2 text-base-content/70 ${TYPOGRAPHY.body}`}>
+  <div class="flex items-center justify-between mb-12 animate-reveal">
+    <div class="accent-line">
+      <h1 class="text-5xl md:text-6xl font-display font-semibold tracking-tight mb-4 text-gradient-gold">
+        Evaluation History
+      </h1>
+      <p class="mt-3 text-base-content/60 text-lg">
         All past evaluation runs and their results.
       </p>
     </div>
-    <Button variant="primary" onclick="document.getElementById('new-evaluation-modal').showModal()">
+    <button
+      onclick="document.getElementById('new-evaluation-modal').showModal()"
+      class="btn btn-luxe btn-luxe-primary px-8 py-3 text-base font-semibold"
+    >
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+      </svg>
       New Evaluation
-    </Button>
+    </button>
   </div>
 
   <FilterBar
@@ -117,10 +125,10 @@ function getStatusVariant(status: string): 'warning' | 'info' | 'success' | 'err
   />
 
   <!-- History List -->
-  <Card class="overflow-visible">
+  <div class="card-luxe overflow-hidden animate-reveal delay-200">
     <div id="evaluations-table-wrapper" class={evaluations.length > 0 ? '' : 'hidden'}>
       <div class="overflow-x-auto">
-        <table class="table table-zebra w-full" id="evaluations-table">
+        <table class="table-luxe" id="evaluations-table">
           <thead>
             <tr>
               <th class="w-10">
@@ -161,27 +169,25 @@ function getStatusVariant(status: string): 'warning' | 'info' | 'success' | 'err
                       {evaluation.accuracy_rubric.replace('_', ' ')}
                     </Badge>
                   </td>
-                  <td>{evaluation.result_count}</td>
-                  <td>
+                  <td class="font-mono">{evaluation.result_count}</td>
+                  <td class="font-mono">
                     {evaluation.avg_accuracy !== undefined ? (
                       <span
-                        class={`font-semibold ${evaluation.avg_accuracy >= 90 ? 'text-success' : evaluation.avg_accuracy >= 70 ? 'text-warning' : 'text-error'}`}
+                        class={`font-bold text-lg ${evaluation.avg_accuracy >= 90 ? 'metric-success' : evaluation.avg_accuracy >= 70 ? 'text-warning' : 'text-error'}`}
                       >
                         {Math.round(evaluation.avg_accuracy)}%
                       </span>
                     ) : (
-                      '-'
+                      <span class="text-base-content/40">—</span>
                     )}
                   </td>
-                  <td>
+                  <td class="font-mono">
                     {evaluation.avg_time_ms !== undefined ? (
-                      <div class="text-sm">
-                        <div class="text-base-content/70">
-                          {Math.round(evaluation.avg_time_ms)}ms
-                        </div>
+                      <div class="text-base text-base-content/70">
+                        {Math.round(evaluation.avg_time_ms)}<span class="text-xs ml-0.5">ms</span>
                       </div>
                     ) : (
-                      '-'
+                      <span class="text-base-content/40">—</span>
                     )}
                   </td>
                   <td>
@@ -195,9 +201,12 @@ function getStatusVariant(status: string): 'warning' | 'info' | 'success' | 'err
                   <td>
                     <a
                       href={`/evaluations/${evaluation.id}`}
-                      class="btn btn-xs btn-ghost text-primary"
+                      class="inline-flex items-center gap-1 text-sm font-medium text-base-content/60 hover:text-base-content transition-colors group"
                     >
-                      View
+                      <span>View</span>
+                      <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 transition-transform group-hover:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                      </svg>
                     </a>
                   </td>
                 </tr>
@@ -207,11 +216,11 @@ function getStatusVariant(status: string): 'warning' | 'info' | 'success' | 'err
         </table>
       </div>
 
-      <div class="flex justify-center mt-6">
+      <div class="flex justify-center p-6 pt-4">
         <Pagination currentPage={page} totalPages={totalPages} limit={limit} />
       </div>
     </div>
-    <div id="evaluations-empty" class={evaluations.length > 0 ? 'hidden' : ''}>
+    <div id="evaluations-empty" class={evaluations.length > 0 ? 'hidden' : 'p-16'}>
       <EmptyState
         title="No evaluations found"
         description={Object.values(filters).some((v) => v !== undefined)
@@ -226,7 +235,7 @@ function getStatusVariant(status: string): 'warning' | 'info' | 'success' | 'err
             }}
       />
     </div>
-  </Card>
+  </div>
 
   <BulkActions />
 </Layout>
