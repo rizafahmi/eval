@@ -127,7 +127,10 @@ const modelIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text
           required
         />
         <p class="text-xs text-base-content/50 -mt-2">
-          Must match the provider's API model identifier.
+          Must match the provider's API model identifier. Use <a
+            href="https://models.dev/"
+            target="_new">Models.dev</a
+          > to find model ID.
         </p>
         <Input label="API Key" name="api_key" type="password" placeholder="sk-..." required />
         <p class="text-xs text-base-content/50 -mt-2">
@@ -145,8 +148,10 @@ const modelIcon = `<svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12 text
             placeholder="Internal notes about this model..."></textarea>
         </div>
         <div class="modal-action">
-          <button type="button" class="btn btn-ghost min-w-24" onclick="add_model_modal.close()"
-            >Cancel</button
+          <button
+            type="button"
+            class="btn btn-ghost min-w-24"
+            onclick="document.getElementById('add-model-modal').close()">Cancel</button
           >
           <button type="submit" class="btn btn-luxe btn-luxe-primary min-w-24">Add Model</button>
         </div>
